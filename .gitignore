@@ -1,0 +1,37 @@
+# Maven target directory
+/target/
+
+# Build artifacts
+*.jar
+*.war
+*.ear
+
+# IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.classpath
+*.project
+*.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test reports
+surefire-reports/
+test-output/
+
+# Environment / security files
+application-*.yml
+application-*.properties
+.env
+http-client.env.json
+
+# IntelliJ HTTP client temporary files
+*.http.response.json

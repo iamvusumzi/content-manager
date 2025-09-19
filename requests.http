@@ -1,0 +1,66 @@
+### Register a new user
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "vusumzi",
+  "password": "secret123",
+  "role": "ROLE_USER"
+}
+
+###
+
+### Login (extract token for later use)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "vusumzi",
+  "password": "secret123"
+}
+
+> {% client.global.set("token", response.body.token); %}
+
+###
+
+### Create content (requires token)
+POST {{host}}/api/contents
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "My first post",
+  "desc": "Learning Spring Boot with JWT",
+  "status": "DRAFT"
+}
+
+###
+
+### Get all contents
+GET {{host}}/api/contents
+Authorization: Bearer {{token}}
+
+###
+
+### Get content by ID
+GET {{host}}/api/contents/1
+Authorization: Bearer {{token}}
+
+###
+
+### Update content
+PUT {{host}}/api/contents/3
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Updated post",
+  "desc": "This is now published",
+  "status": "PUBLISHED"
+}
+
+###
+
+### Delete content
+DELETE {{host}}/api/contents/3
+Authorization: Bearer {{token}}
