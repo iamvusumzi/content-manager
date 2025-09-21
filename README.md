@@ -114,4 +114,4 @@ mvn test
 
 ---
 
-📌 Built by [**Vusumzi**](https://github.com/your-username) — practicing Spring Boot for SDE1 readiness 🚀  
+📌 Built by [**Vusumzi**](https://github.com/iamvusumzi) — practicing Spring Boot for SDE1 readiness 🚀  
