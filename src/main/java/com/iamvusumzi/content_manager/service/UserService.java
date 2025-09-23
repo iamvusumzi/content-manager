@@ -4,8 +4,10 @@ import com.iamvusumzi.content_manager.dto.UserRequest;
 import com.iamvusumzi.content_manager.dto.UserResponse;
 import com.iamvusumzi.content_manager.model.User;
 import com.iamvusumzi.content_manager.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserService {
@@ -18,12 +20,15 @@ public class UserService {
     }
 
     public UserResponse register(UserRequest request) {
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
+        }
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
         User user = new User(
                 request.getUsername(),
                 encodedPassword,
-                request.getRole()
+                "ROLE_USER"
         );
         User savedUser = userRepository.save(user);
 
