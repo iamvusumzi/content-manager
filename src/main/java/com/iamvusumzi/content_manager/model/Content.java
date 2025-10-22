@@ -20,14 +20,27 @@ public class Content {
 
     private LocalDateTime dateUpdated;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private User author;
+
     public Content() {}
-    public Content(String title, String desc, Status status) {
+    public Content(String title, String desc, Status status, User author) {
         this.title = title;
         this.desc = desc;
         this.status = status;
         this.dateCreated = LocalDateTime.now();
         this.dateUpdated = null;
+        this.author = author;
     }
+
+    public User getAuthor() {
+        return author;
+    }
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
     public Integer getId() {
         return id;
     }

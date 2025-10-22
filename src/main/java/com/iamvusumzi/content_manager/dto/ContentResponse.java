@@ -9,6 +9,7 @@ public class ContentResponse {
     private String Status;
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;
+    private String author;
 
     public Integer getId() {
         return id;
@@ -29,6 +30,7 @@ public class ContentResponse {
     public LocalDateTime getDateUpdated() {
         return dateUpdated;
     }
+    public String getAuthor() { return author; }
 
     public void setId(Integer id) {
         this.id = id;
@@ -48,4 +50,6 @@ public class ContentResponse {
     public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
     }
+    public void setAuthor(String author) { this.author = author; }
+
 }
