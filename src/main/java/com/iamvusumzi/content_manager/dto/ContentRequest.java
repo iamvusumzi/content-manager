@@ -1,6 +1,5 @@
 package com.iamvusumzi.content_manager.dto;
 
-import com.iamvusumzi.content_manager.model.Status;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
