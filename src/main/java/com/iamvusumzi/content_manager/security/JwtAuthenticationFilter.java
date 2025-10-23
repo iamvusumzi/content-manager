@@ -20,7 +20,6 @@ import java.util.Collections;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     public JwtAuthenticationFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -32,34 +31,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
-        log.info("authHeader: {}", authHeader);
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            log.info("extracting token");
-            String token = authHeader.substring(7);
-            log.info("JWT Token: {}", token);
+        final String authHeader = request.getHeader("Authorization");
+        final String token;
+        final String username;
 
-            try {
-                Claims claims = jwtUtil.extractClaims(token);
-                String username = claims.getSubject();
-                log.info("username: {}", username);
-                String role = claims.get("role", String.class);
-                log.info("role: {}",role);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                username,
-                                null,
-                                Collections.singletonList(new SimpleGrantedAuthority(role))
-                        );
+        token = authHeader.substring(7);
+        Claims claims = jwtUtil.extractClaims(token);
+        username = claims.getSubject();
+        String role = claims.get("role", String.class);
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            } catch (Exception e) {
-                SecurityContextHolder.clearContext();
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (role != null && !role.startsWith("ROLE_")) {
+                role = "ROLE_" + role;
             }
+
+            UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(
+                            username,
+                            null,
+                            Collections.singletonList(new SimpleGrantedAuthority(role))
+                    );
+
+            SecurityContextHolder.getContext().setAuthentication(authToken);
         }
 
         filterChain.doFilter(request, response);
     }
+
 }

@@ -3,8 +3,10 @@ package com.iamvusumzi.content_manager.controller;
 import com.iamvusumzi.content_manager.dto.ContentRequest;
 import com.iamvusumzi.content_manager.dto.ContentResponse;
 import com.iamvusumzi.content_manager.model.Content;
-import com.iamvusumzi.content_manager.service.ContentService;
+import com.iamvusumzi.content_manager.service.impl.UserContentServiceImpl;
 import jakarta.validation.Valid;
+import org.jboss.logging.Logger;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +18,18 @@ import java.util.List;
 @RequestMapping("api/contents")
 public class ContentController {
 
-    private final ContentService contentService;
+    private final UserContentServiceImpl userContentService;
 
-    public ContentController(ContentService contentService) {
-        this.contentService = contentService;
+
+    public ContentController(UserContentServiceImpl userContentService) {
+        this.userContentService = userContentService;
     }
 
     @PostMapping
     public ResponseEntity<ContentResponse> createContent(@Valid @RequestBody ContentRequest request) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Content createdContent = contentService.createContent(username, request);
+
+        Content createdContent = userContentService.createContent(username, request);
         ContentResponse response = mapToResponse(createdContent);
         return ResponseEntity
                 .created(URI.create("/api/contents/" + createdContent.getId()))
@@ -37,7 +41,7 @@ public class ContentController {
             @PathVariable Integer id,
             @Valid @RequestBody ContentRequest request) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Content updatedContent = contentService.updateContent(username, id, request);
+        Content updatedContent = userContentService.updateContent(username, id, request);
         return ResponseEntity.ok(mapToResponse(updatedContent));
 
     }
@@ -45,13 +49,13 @@ public class ContentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContent(@PathVariable Integer id) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        contentService.deleteContentById(username, id);
+        userContentService.deleteContent(username, id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
     public ResponseEntity<List<ContentResponse>> getAllPublishedContents() {
-        List<Content> contents = contentService.getPublichedContents();
+        List<Content> contents = userContentService.getAllPublishedContents();
         List<ContentResponse> response = contents.stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -64,7 +68,7 @@ public class ContentController {
     @GetMapping("/mine")
     public ResponseEntity<List<ContentResponse>> getMyContents() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<Content> contents = contentService.getMyContents(username);
+        List<Content> contents = userContentService.getMyContents(username);
         List<ContentResponse> response = contents.stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -77,7 +81,7 @@ public class ContentController {
     @GetMapping("/{id}")
     public ResponseEntity<ContentResponse> getContentById(@PathVariable Integer id) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Content content = contentService.getContentById(id, username);
+        Content content = userContentService.getContentById(id, username);
 
         ContentResponse response = mapToResponse(content);
 
