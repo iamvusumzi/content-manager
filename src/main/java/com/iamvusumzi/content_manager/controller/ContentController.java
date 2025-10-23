@@ -6,11 +6,11 @@ import com.iamvusumzi.content_manager.model.Content;
 import com.iamvusumzi.content_manager.service.ContentService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/contents")
@@ -24,7 +24,8 @@ public class ContentController {
 
     @PostMapping
     public ResponseEntity<ContentResponse> createContent(@Valid @RequestBody ContentRequest request) {
-        Content createdContent = contentService.createContent(request);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Content createdContent = contentService.createContent(username, request);
         ContentResponse response = mapToResponse(createdContent);
         return ResponseEntity
                 .created(URI.create("/api/contents/" + createdContent.getId()))
@@ -35,33 +36,52 @@ public class ContentController {
     public ResponseEntity<ContentResponse> updateContent(
             @PathVariable Integer id,
             @Valid @RequestBody ContentRequest request) {
-        Content updatedContent = contentService.updateContent(id, request);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Content updatedContent = contentService.updateContent(username, id, request);
         return ResponseEntity.ok(mapToResponse(updatedContent));
 
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContent(@PathVariable Integer id) {
-        contentService.deleteContentById(id);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        contentService.deleteContentById(username, id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<ContentResponse>> getAllContent() {
-        List<ContentResponse> responses = contentService.getAllContent()
-                .stream()
+    public ResponseEntity<List<ContentResponse>> getAllPublishedContents() {
+        List<Content> contents = contentService.getPublichedContents();
+        List<ContentResponse> response = contents.stream()
                 .map(this::mapToResponse)
-                .collect(Collectors.toList());
-        if(responses.isEmpty()) {
+                .toList();
+        if(response.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/mine")
+    public ResponseEntity<List<ContentResponse>> getMyContents() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<Content> contents = contentService.getMyContents(username);
+        List<ContentResponse> response = contents.stream()
+                .map(this::mapToResponse)
+                .toList();
+        if(response.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ContentResponse> getContentById(@PathVariable Integer id) {
-        return contentService.getContentById(id)
-                .map(content -> ResponseEntity.ok(mapToResponse(content)))
-                .orElse(ResponseEntity.notFound().build());
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Content content = contentService.getContentById(id, username);
+
+        ContentResponse response = mapToResponse(content);
+
+        return ResponseEntity.ok(response);
     }
 
     private ContentResponse mapToResponse(Content content) {
@@ -72,6 +92,7 @@ public class ContentController {
         dto.setStatus(content.getStatus().name());
         dto.setDateCreated(content.getDateCreated());
         dto.setDateUpdated(content.getDateUpdated());
+        dto.setAuthor(content.getAuthor().getUsername());
         return dto;
     }
 

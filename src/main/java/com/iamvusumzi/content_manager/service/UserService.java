@@ -2,6 +2,7 @@ package com.iamvusumzi.content_manager.service;
 
 import com.iamvusumzi.content_manager.dto.UserRequest;
 import com.iamvusumzi.content_manager.dto.UserResponse;
+import com.iamvusumzi.content_manager.model.Role;
 import com.iamvusumzi.content_manager.model.User;
 import com.iamvusumzi.content_manager.repository.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -28,14 +29,14 @@ public class UserService {
         User user = new User(
                 request.getUsername(),
                 encodedPassword,
-                "ROLE_USER"
+                Role.USER
         );
         User savedUser = userRepository.save(user);
 
         UserResponse userResponse = new UserResponse();
         userResponse.setId(savedUser.getId());
         userResponse.setUsername(savedUser.getUsername());
-        userResponse.setRole(savedUser.getRole());
+        userResponse.setRole(savedUser.getRole().name());
 
         return userResponse;
     }

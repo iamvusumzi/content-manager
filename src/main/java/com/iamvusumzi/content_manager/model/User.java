@@ -2,6 +2,9 @@ package com.iamvusumzi.content_manager.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -15,13 +18,20 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public User() {}
-    public User(String username, String password, String role) {
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Content> contents;
+
+    public User() {
+        contents = new ArrayList<>();
+    }
+    public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.contents = new ArrayList<>();
     }
 
     public Integer getId() { return id; }
@@ -30,6 +40,17 @@ public class User {
     public void setUsername(String username) { this.username = username; }
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
+    public List<Content> getContents() { return contents; }
+
+    public  void addContent(Content content) {
+        content.setAuthor(this);
+        contents.add(content);
+    }
+
+    public void removeContent(Content content) {
+        content.setAuthor(null);
+        contents.remove(content);
+    }
 }
