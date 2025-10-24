@@ -1,3 +1,12 @@
+### Get all published contents
+GET {{host}}/api/contents
+Authorization: Bearer {{token}}
+
+###
+
+###
+
+
 ### Register a new user
 POST {{host}}/api/auth/register
 Content-Type: application/json
@@ -5,7 +14,7 @@ Content-Type: application/json
 {
   "username": "vusumzi",
   "password": "secret123",
-  "role": "ROLE_USER"
+  "role": "USER"
 }
 
 ###
@@ -22,6 +31,10 @@ Content-Type: application/json
 > {% client.global.set("token", response.body.token); %}
 
 ###
+GET {{host}}/api/contents/mine
+Authorization: Bearer {{token}}
+
+###
 
 ### Create content (requires token)
 POST {{host}}/api/contents
@@ -36,12 +49,6 @@ Content-Type: application/json
 
 ###
 
-### Get all contents
-GET {{host}}/api/contents
-Authorization: Bearer {{token}}
-
-###
-
 ### Get content by ID
 GET {{host}}/api/contents/1
 Authorization: Bearer {{token}}
@@ -49,7 +56,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### Update content
-PUT {{host}}/api/contents/3
+PUT {{host}}/api/contents/1
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
