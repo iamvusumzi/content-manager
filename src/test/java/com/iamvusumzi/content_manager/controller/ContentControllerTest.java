@@ -49,11 +49,10 @@ class ContentControllerTest {
     private ObjectMapper objectMapper;
 
     private Content content;
-    private User author;
 
     @BeforeEach
     void setUp() {
-        author = new User();
+        User author = new User();
         author.setId(1);
         author.setUsername("vusumzi");
 

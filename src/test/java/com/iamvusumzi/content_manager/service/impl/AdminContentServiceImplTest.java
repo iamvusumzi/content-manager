@@ -40,7 +40,6 @@ class AdminContentServiceImplTest {
     private AdminContentServiceImpl adminContentService;
 
     private User admin;
-    private User author;
     private Content content;
 
     @BeforeEach
@@ -49,7 +48,7 @@ class AdminContentServiceImplTest {
         admin.setId(1);
         admin.setUsername("admin");
 
-        author = new User();
+        User author = new User();
         author.setId(2);
         author.setUsername("vusumzi");
 
