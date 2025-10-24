@@ -130,4 +130,55 @@ Or using IntelliJ HTTP Client:
 
 ---
 
+## 🧭 Next Steps
+
+### 1️⃣ Testing Roadmap
+| Branch                 | Focus | Description |
+|------------------------|--------|-------------|
+| `test/auth`            | Security | Validate JWT parsing and filter behavior |
+| `test/integration-tests` | End-to-End | Real JWTs, H2 database, and API interaction tests |
+
+---
+
+### 2️⃣ Logging & Monitoring (Pre-Deployment)
+Before deployment, add structured logging **and monitoring** for observability and health insights.
+
+- Implement **SLF4J + Logback** for file & console logging
+- Add **Spring Boot Actuator** for real-time monitoring
+    - Enable endpoints: `/actuator/health`, `/metrics`, `/info`, `/loggers`
+- Prepare for future integrations:
+    - **Prometheus/Grafana** for metrics visualization
+    - **ELK stack** for centralized log analysis
+
+---
+
+### 3️⃣ Integration Tests
+Use real JWTs via `JwtUtil`, run against full Spring context with an in-memory H2 database.  
+Validate:
+- Authenticated users → manage own content
+- Admins → view/delete all
+- Guests → view *published* content
+
+---
+
+### 4️⃣ Future Enhancements
+- **Notification Service** for admin deletions
+- **Event Publisher/Listener** for async handling
+- **Audit Trail** for user activity tracking
+
+---
+
+### 5️⃣ CI/CD Automation
+Add **GitHub Actions** to:
+- Run all test suites
+- Build and containerize app
+- Deploy automatically to **Heroku** or **AWS**
+- Include static analysis and test coverage reporting
+
+---
+
+**Next up:**  
+Start `test/auth`, then implement `feature/logging-monitoring` (Logback + Actuator) before moving to integration and deployment.
+
+
 📌 Built by [**Vusumzi**](https://github.com/iamvusumzi) — evolving toward production-grade Spring Boot mastery 🚀
