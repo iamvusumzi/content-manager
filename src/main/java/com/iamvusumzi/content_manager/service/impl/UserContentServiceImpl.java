@@ -9,7 +9,6 @@ import com.iamvusumzi.content_manager.service.ContentService;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service("userContentService")

@@ -20,7 +20,7 @@ import java.util.List;
 public class ContentController {
 
     private final UserContentServiceImpl userContentService;
-    private AdminContentServiceImpl  adminContentService;
+    private final AdminContentServiceImpl  adminContentService;
 
     public ContentController(@Qualifier("userContentService") ContentService userContentService,
                              @Qualifier("adminContentService") ContentService adminContentService) {
