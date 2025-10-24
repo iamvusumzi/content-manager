@@ -5,8 +5,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,26 +39,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         token = authHeader.substring(7);
-        Claims claims = jwtUtil.extractClaims(token);
-        username = claims.getSubject();
-        String role = claims.get("role", String.class);
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        try {
+            Claims claims = jwtUtil.extractClaims(token);
+            username = claims.getSubject();
+            String role = claims.get("role", String.class);
+
             if (role != null && !role.startsWith("ROLE_")) {
-                role = "ROLE_" + role;
-            }
+                    role = "ROLE_" + role;
+                }
 
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(
                             username,
                             null,
                             Collections.singletonList(new SimpleGrantedAuthority(role))
-                    );
+                        );
 
             SecurityContextHolder.getContext().setAuthentication(authToken);
+        } catch (Exception e) {
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
+
     }
 
 }
