@@ -1,6 +1,6 @@
 package com.iamvusumzi.content_manager.service;
 
-import com.iamvusumzi.content_manager.dto.LoginRequest;
+import com.iamvusumzi.content_manager.service.auth.dto.LoginRequest;
 import com.iamvusumzi.content_manager.dto.LoginResponse;
 import com.iamvusumzi.content_manager.model.User;
 import com.iamvusumzi.content_manager.repository.UserRepository;
@@ -9,12 +9,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthService {
+public class AuthServiceInit {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public AuthService(UserRepository userRepository,  PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public AuthServiceInit(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;

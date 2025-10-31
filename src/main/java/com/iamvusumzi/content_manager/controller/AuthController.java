@@ -1,10 +1,10 @@
 package com.iamvusumzi.content_manager.controller;
 
-import com.iamvusumzi.content_manager.dto.LoginRequest;
+import com.iamvusumzi.content_manager.service.auth.dto.LoginRequest;
 import com.iamvusumzi.content_manager.dto.LoginResponse;
 import com.iamvusumzi.content_manager.dto.UserRequest;
 import com.iamvusumzi.content_manager.dto.UserResponse;
-import com.iamvusumzi.content_manager.service.AuthService;
+import com.iamvusumzi.content_manager.service.AuthServiceInit;
 import com.iamvusumzi.content_manager.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +19,9 @@ import java.net.URI;
 @RequestMapping("/api/auth")
 public class AuthController {
     private final UserService userService;
-    private final AuthService authService;
+    private final AuthServiceInit authService;
 
-    public AuthController(UserService userService, AuthService authService) {
+    public AuthController(UserService userService, AuthServiceInit authService) {
         this.userService = userService;
         this.authService = authService;
     }
