@@ -68,4 +68,17 @@ public abstract class BaseContentService {
 
         return contentRepository.save(existing);
     }
+
+    protected Content getContent(String username, Integer contentId) {
+        Content content = contentRepository.findById(contentId)
+                .orElseThrow(()-> new RuntimeException("Content not found"));
+        if(content.getStatus().equals(Status.PUBLISHED)) return content;
+
+        User author = userRepository.findByUsername(username)
+                .orElseThrow(()-> new RuntimeException("User not found"));
+        boolean isAuthor = content.getAuthor().getId().equals(author.getId());
+
+        if(!isAuthor) throw new AccessDeniedException("You are not authorized to view this content");
+        return content;
+    }
 }

@@ -102,10 +102,10 @@ Authorization: Bearer <token>
 
 ## 🧑‍💻 Roles & Permissions
 
-| Role | Can Create | Can Edit | Can Delete | Can View All |
-|------|-------------|-----------|-------------|---------------|
-| USER | ✅ Own content | ✅ Own content | ✅ Own content | 🚫 |
-| ADMIN | ✅ Own content | ✅ Own content | ✅ Any content | ✅ |
+| Role | Can Create | Can Edit | Can Delete | Can View                |
+|------|-------------|-----------|-------------|-------------------------|
+| USER | ✅ Own content | ✅ Own content | ✅ Own content | ✅ Published/Own Content |
+| ADMIN | ✅ Own content | ✅ Own content | ✅ Any content | ✅ Published/Own Content |
 
 ---
 
@@ -156,7 +156,7 @@ Before deployment, add structured logging **and monitoring** for observability a
 Use real JWTs via `JwtUtil`, run against full Spring context with an in-memory H2 database.  
 Validate:
 - Authenticated users → manage own content
-- Admins → view/delete all
+- Admins → manage own content, delete any published content
 - Guests → view *published* content
 
 ---
