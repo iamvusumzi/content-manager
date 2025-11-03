@@ -1,40 +1,37 @@
 package com.iamvusumzi.content_manager.controller;
 
-import com.iamvusumzi.content_manager.service.auth.dto.LoginRequest;
-import com.iamvusumzi.content_manager.dto.LoginResponse;
-import com.iamvusumzi.content_manager.dto.UserRequest;
-import com.iamvusumzi.content_manager.dto.UserResponse;
-import com.iamvusumzi.content_manager.service.AuthServiceInit;
-import com.iamvusumzi.content_manager.service.UserService;
+import com.iamvusumzi.content_manager.service.auth.AuthService;
+import com.iamvusumzi.content_manager.service.auth.dto.*;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.net.URI;
 
 @Controller
 @RequestMapping("/api/auth")
 public class AuthController {
-    private final UserService userService;
-    private final AuthServiceInit authService;
 
-    public AuthController(UserService userService, AuthServiceInit authService) {
-        this.userService = userService;
-        this.authService = authService;
+    private final AuthService userAuthService;
+
+    public AuthController(@Qualifier("userAuthService") AuthService userAuthService) {
+        this.userAuthService = userAuthService;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest user) {
-        UserResponse userResponse = userService.register(user);
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+        AuthResponse response = userAuthService.register(request);
         return ResponseEntity
-                .created(URI.create("/api/auth/" + userResponse.getId()))
-                .body(userResponse);
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest user) {
-        return ResponseEntity.ok(authService.login(user));
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+        AuthResponse response = userAuthService.login(request);
+        return ResponseEntity.ok(response);
     }
 }

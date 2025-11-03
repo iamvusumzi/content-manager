@@ -1,8 +1,6 @@
 package com.iamvusumzi.content_manager.service.auth;
 
-import com.iamvusumzi.content_manager.service.auth.dto.AuthResponse;
-import com.iamvusumzi.content_manager.service.auth.dto.LoginRequest;
-import com.iamvusumzi.content_manager.service.auth.dto.RegisterRequest;
+import com.iamvusumzi.content_manager.service.auth.dto.*;
 
 public interface AuthService {
     AuthResponse login(LoginRequest loginRequest);
