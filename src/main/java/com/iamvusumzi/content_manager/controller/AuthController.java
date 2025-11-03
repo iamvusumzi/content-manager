@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AuthController {
 
     private final AuthService userAuthService;
+    private final AuthService adminAuthService;
 
-    public AuthController(@Qualifier("userAuthService") AuthService userAuthService) {
+    public AuthController(@Qualifier("userAuthService") AuthService userAuthService,
+                          @Qualifier("adminAuthService")  AuthService adminAuthService) {
         this.userAuthService = userAuthService;
+        this.adminAuthService = adminAuthService;
     }
 
     @PostMapping("/register")
@@ -29,6 +32,15 @@ public class AuthController {
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
+
+    @PostMapping("/register/admin")
+    public ResponseEntity<AuthResponse> registerAdmin(@Valid @RequestBody RegisterRequest request) {
+        AuthResponse response = adminAuthService.register(request);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse response = userAuthService.login(request);
