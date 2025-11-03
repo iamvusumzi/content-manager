@@ -2,6 +2,7 @@ package com.iamvusumzi.content_manager.service.impl;
 
 import com.iamvusumzi.content_manager.dto.ContentRequest;
 import com.iamvusumzi.content_manager.model.Content;
+import com.iamvusumzi.content_manager.model.Status;
 import com.iamvusumzi.content_manager.repository.ContentRepository;
 import com.iamvusumzi.content_manager.repository.UserRepository;
 import com.iamvusumzi.content_manager.service.ContentService;
@@ -27,7 +28,7 @@ public class AdminContentServiceImpl extends BaseContentService implements Conte
     }
 
     public List<Content> getAllContents() {
-        return contentRepository.findAll();
+        return contentRepository.findByStatusOrderByDateCreatedDesc(Status.PUBLISHED);
     }
 
     @Override
