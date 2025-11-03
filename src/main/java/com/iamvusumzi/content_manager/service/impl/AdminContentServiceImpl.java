@@ -27,6 +27,7 @@ public class AdminContentServiceImpl extends BaseContentService implements Conte
         return findContentByAuthor(username);
     }
 
+    @Override
     public List<Content> getAllContents() {
         return contentRepository.findByStatusOrderByDateCreatedDesc(Status.PUBLISHED);
     }
