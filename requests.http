@@ -1,8 +1,5 @@
 ### Get all published contents
 GET {{host}}/api/contents
-Authorization: Bearer {{token}}
-
-###
 
 ###
 
@@ -16,6 +13,8 @@ Content-Type: application/json
   "password": "secret123",
   "role": "USER"
 }
+
+> {% client.global.set("token", response.body.token); %}
 
 ###
 
@@ -31,7 +30,7 @@ Content-Type: application/json
 > {% client.global.set("token", response.body.token); %}
 
 ###
-GET {{host}}/api/contents/mine
+GET {{host}}/api/contents/my
 Authorization: Bearer {{token}}
 
 ###
@@ -56,7 +55,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### Update content
-PUT {{host}}/api/contents/1
+PUT {{host}}/api/contents/2
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

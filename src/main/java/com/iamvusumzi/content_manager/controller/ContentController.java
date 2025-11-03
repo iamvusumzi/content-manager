@@ -57,7 +57,9 @@ public class ContentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContent(@PathVariable Integer id) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        userContentService.deleteContent(username, id);
+
+        ContentService service = getContentService();
+        service.deleteContent(username, id);
         return ResponseEntity.noContent().build();
     }
 

@@ -35,16 +35,7 @@ public class UserContentServiceImpl extends BaseContentService implements Conten
 
     @Override
     public Content getContentById(Integer contentId, String username) {
-        Content content = contentRepository.findById(contentId)
-                .orElseThrow(()-> new RuntimeException("Content not found"));
-        if(content.getStatus().equals(Status.PUBLISHED)) return content;
-
-        User author = userRepository.findByUsername(username)
-                .orElseThrow(()-> new RuntimeException("User not found"));
-        boolean isAuthor = content.getAuthor().getId().equals(author.getId());
-
-        if(!isAuthor) throw new AccessDeniedException("You are not authorized to view this content");
-        return content;
+        return getContent(username, contentId);
     }
 
     @Override
