@@ -102,10 +102,10 @@ Authorization: Bearer <token>
 
 ## 🧑‍💻 Roles & Permissions
 
-| Role | Can Create | Can Edit | Can Delete | Can View                |
-|------|-------------|-----------|-------------|-------------------------|
+| Role | Can Create | Can Edit | Can Delete    | Can View                |
+|------|-------------|-----------|---------------|-------------------------|
 | USER | ✅ Own content | ✅ Own content | ✅ Own content | ✅ Published/Own Content |
-| ADMIN | ✅ Own content | ✅ Own content | ✅ Any content | ✅ Published/Own Content |
+| ADMIN | ✅ Own content | ✅ Own content | ✅ Published/Own Content | ✅ Published/Own Content |
 
 ---
 
@@ -123,8 +123,8 @@ Or using IntelliJ HTTP Client:
 
 ## 🧱 Developer Notes
 
-- Default admin created on startup:  
-  **username:** `admin` | **password:** `admin123`
+- Include field for admin registration:  
+  **adminSecret:** `appadminsecret123`
 - Role & username extracted dynamically from `SecurityContext`.
 - Controller auto-selects service implementation (User/Admin) per request.
 

@@ -114,26 +114,38 @@ class AdminContentServiceImplTest {
     // getAllContents()
     // ----------------------------
     @Test
-    void shouldReturnAllContents() {
-        when(contentRepository.findAll()).thenReturn(List.of(content));
+    void shouldReturnAllPushedContents() {
+        content.setStatus(Status.PUBLISHED);
+        when(contentRepository.findByStatusOrderByDateCreatedDesc(Status.PUBLISHED)).thenReturn(List.of(content));
 
         List<Content> results = adminContentService.getAllContents();
 
         assertThat(results).hasSize(1);
         assertThat(results.get(0).getTitle()).isEqualTo("Sample Content");
-        verify(contentRepository).findAll();
+        verify(contentRepository).findByStatusOrderByDateCreatedDesc(Status.PUBLISHED);
     }
 
     // ----------------------------
     // getContentById()
     // ----------------------------
     @Test
-    void shouldReturnContentById() {
+    void shouldReturnPublishedContentById() {
+        content.setStatus(Status.PUBLISHED);
         when(contentRepository.findById(10)).thenReturn(Optional.of(content));
 
         Content result = adminContentService.getContentById(10, "admin");
 
         assertThat(result).isEqualTo(content);
+    }
+
+    @Test
+    void shouldThrowWhenContentByIdNotPublished() {
+        when(contentRepository.findById(10)).thenReturn(Optional.of(content));
+        when(userRepository.findByUsername("admin")).thenReturn(Optional.of(admin));
+
+        assertThatThrownBy(() -> adminContentService.getContentById( 10, "admin"))
+                .isInstanceOf(AccessDeniedException.class)
+                .hasMessageContaining("not authorized");
     }
 
     @Test
@@ -187,7 +199,9 @@ class AdminContentServiceImplTest {
     // deleteContent()
     // ----------------------------
     @Test
-    void shouldDeleteAnyContent() {
+    void shouldDeletePublishedContentByOtherAuthor() {
+        content.setStatus(Status.PUBLISHED);
+        when(userRepository.findByUsername("admin")).thenReturn(Optional.of(admin));
         when(contentRepository.findById(10)).thenReturn(Optional.of(content));
 
         adminContentService.deleteContent("admin", 10);
@@ -196,11 +210,25 @@ class AdminContentServiceImplTest {
     }
 
     @Test
-    void shouldThrowWhenContentNotFound_OnDelete() {
-        when(contentRepository.findById(99)).thenReturn(Optional.empty());
+    void shouldDeleteOwnDraftContent() {
+        content.setAuthor(admin);
 
-        assertThatThrownBy(() -> adminContentService.deleteContent("admin", 99))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Content not found");
+        when(userRepository.findByUsername("admin")).thenReturn(Optional.of(admin));
+        when(contentRepository.findById(10)).thenReturn(Optional.of(content));
+
+        adminContentService.deleteContent("admin", 10);
+
+        verify(contentRepository).delete(content);
     }
+
+    @Test
+    void shouldThrowWhenDeletingOthersDraft() {
+        when(userRepository.findByUsername("admin")).thenReturn(Optional.of(admin));
+        when(contentRepository.findById(12)).thenReturn(Optional.of(content));
+
+        assertThatThrownBy(() -> adminContentService.deleteContent("admin", 12))
+                .isInstanceOf(AccessDeniedException.class)
+                .hasMessageContaining("not allowed");
+    }
+
 }
