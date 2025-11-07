@@ -123,8 +123,8 @@ Or using IntelliJ HTTP Client:
 
 ## 🧱 Developer Notes
 
-- Default admin created on startup:  
-  **username:** `admin` | **password:** `admin123`
+- Include field for admin registration:  
+  **adminSecret:** `appadminsecret123`
 - Role & username extracted dynamically from `SecurityContext`.
 - Controller auto-selects service implementation (User/Admin) per request.
 
