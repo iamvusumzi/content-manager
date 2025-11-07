@@ -90,6 +90,7 @@ Authorization: Bearer <token>
 | Method | Endpoint | Description | Access |
 |--------|-----------|-------------|---------|
 | POST | `/api/auth/register` | Register new user | Public |
+| POST | `/api/auth/register/admin` | Register Admin | Restriced, needs `adminSecret` key
 | POST | `/api/auth/login` | Login, get JWT | Public |
 | GET | `/api/contents` | List all published content | Public |
 | GET | `/api/contents/my` | Get content by logged-in user | User |
@@ -135,7 +136,6 @@ Or using IntelliJ HTTP Client:
 ### 1️⃣ Testing Roadmap
 | Branch                 | Focus | Description |
 |------------------------|--------|-------------|
-| `test/auth`            | Security | Validate JWT parsing and filter behavior |
 | `test/integration-tests` | End-to-End | Real JWTs, H2 database, and API interaction tests |
 
 ---
@@ -165,6 +165,7 @@ Validate:
 - **Notification Service** for admin deletions
 - **Event Publisher/Listener** for async handling
 - **Audit Trail** for user activity tracking
+- **MySql/PostgreSQL** for database
 
 ---
 
