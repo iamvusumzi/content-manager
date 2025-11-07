@@ -90,7 +90,7 @@ Authorization: Bearer <token>
 | Method | Endpoint | Description | Access |
 |--------|-----------|-------------|---------|
 | POST | `/api/auth/register` | Register new user | Public |
-| POST | `/api/auth/register/admin` | Register Admin | Restriced, needs `adminSecret` key
+| POST | `/api/auth/register/admin` | Register Admin | Restriced, needs `adminSecret` key |
 | POST | `/api/auth/login` | Login, get JWT | Public |
 | GET | `/api/contents` | List all published content | Public |
 | GET | `/api/contents/my` | Get content by logged-in user | User |
