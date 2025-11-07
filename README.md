@@ -102,10 +102,10 @@ Authorization: Bearer <token>
 
 ## 🧑‍💻 Roles & Permissions
 
-| Role | Can Create | Can Edit | Can Delete | Can View                |
-|------|-------------|-----------|-------------|-------------------------|
+| Role | Can Create | Can Edit | Can Delete    | Can View                |
+|------|-------------|-----------|---------------|-------------------------|
 | USER | ✅ Own content | ✅ Own content | ✅ Own content | ✅ Published/Own Content |
-| ADMIN | ✅ Own content | ✅ Own content | ✅ Any content | ✅ Published/Own Content |
+| ADMIN | ✅ Own content | ✅ Own content | ✅ Published/Own Content | ✅ Published/Own Content |
 
 ---
 
