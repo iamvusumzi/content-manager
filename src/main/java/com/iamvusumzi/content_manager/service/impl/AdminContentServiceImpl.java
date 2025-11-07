@@ -3,9 +3,11 @@ package com.iamvusumzi.content_manager.service.impl;
 import com.iamvusumzi.content_manager.dto.ContentRequest;
 import com.iamvusumzi.content_manager.model.Content;
 import com.iamvusumzi.content_manager.model.Status;
+import com.iamvusumzi.content_manager.model.User;
 import com.iamvusumzi.content_manager.repository.ContentRepository;
 import com.iamvusumzi.content_manager.repository.UserRepository;
 import com.iamvusumzi.content_manager.service.ContentService;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,7 +48,16 @@ public class AdminContentServiceImpl extends BaseContentService implements Conte
     public void deleteContent(String username, Integer contentId) {
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(()-> new RuntimeException("Content not found"));
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(()-> new RuntimeException("User not found"));
 
-        contentRepository.delete(content);
+        boolean isAuthor = content.getAuthor().getId().equals(currentUser.getId());
+        boolean isPublished = content.getStatus() == Status.PUBLISHED;
+
+        if (isAuthor || isPublished) {
+            contentRepository.delete(content);
+        } else {
+            throw new AccessDeniedException("You are not allowed to delete this content");
+        }
     }
 }
