@@ -31,7 +31,7 @@ public abstract class BaseAuthService implements AuthService {
             throw new RuntimeException("Invalid username or password");
         }
 
-        String token = jwtUtil.generateToken(loginRequest.getUsername(), loginRequest.getPassword());
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
         return new AuthResponse(token, user.getUsername(), user.getRole().name());
     }
 }
