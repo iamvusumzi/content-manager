@@ -1,6 +1,7 @@
 package com.iamvusumzi.content_manager.security;
 
-import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,41 +29,42 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
-
-        final String authHeader = request.getHeader("Authorization");
-        final String token;
-        final String username;
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        token = authHeader.substring(7);
-
+        String token = extractJwtFromRequest(request);
         try {
-            Claims claims = jwtUtil.extractClaims(token);
-            username = claims.getSubject();
-            String role = claims.get("role", String.class);
+            if (token != null && jwtUtil.validateToken(token, jwtUtil.extractUsername(token))) {
+                String username = jwtUtil.extractUsername(token);
+                String role = jwtUtil.extractRole(token);
 
-            if (role != null && !role.startsWith("ROLE_")) {
+                if (role != null && !role.startsWith("ROLE_")) {
                     role = "ROLE_" + role;
                 }
 
-            UsernamePasswordAuthenticationToken authToken =
-                    new UsernamePasswordAuthenticationToken(
-                            username,
-                            null,
-                            Collections.singletonList(new SimpleGrantedAuthority(role))
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                username,
+                                null,
+                                Collections.singleton(new SimpleGrantedAuthority(role))
                         );
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
 
-            SecurityContextHolder.getContext().setAuthentication(authToken);
-        } catch (Exception e) {
+            filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
             SecurityContextHolder.clearContext();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token has expired");
+        } catch (JwtException e) {
+            SecurityContextHolder.clearContext();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
         }
 
-        filterChain.doFilter(request, response);
+    }
 
+    private String extractJwtFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
 }
