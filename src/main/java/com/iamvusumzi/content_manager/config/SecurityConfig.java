@@ -3,6 +3,9 @@ package com.iamvusumzi.content_manager.config;
 import com.iamvusumzi.content_manager.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,9 +23,11 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
+    private final Environment environment;
     private final JwtAuthenticationFilter  jwtAuthenticationFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfig(Environment environment, JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.environment = environment;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
     @Bean
@@ -31,8 +36,30 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Order(1)
+    public SecurityFilterChain actuatorSecurity(HttpSecurity http) throws Exception {
+
+        HttpSecurity httpSecurity = http.securityMatcher("/actuator/**");
+
+        if(environment.acceptsProfiles(Profiles.of("dev"))) {
+            httpSecurity.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+        } else {
+        httpSecurity
+                .securityMatcher("/actuator/**")
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/actuator/health", "/actuator/info", "/actuator/prometheus").permitAll()
+                .anyRequest().denyAll());
+        }
+
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        return httpSecurity.build();
+    }
+
+    @Bean
+    @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        HttpSecurity httpSecurity = http.securityMatcher("/api/**");
+        httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
@@ -43,7 +70,7 @@ public class SecurityConfig {
                 )
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+        return httpSecurity.build();
     }
 
     @Bean
