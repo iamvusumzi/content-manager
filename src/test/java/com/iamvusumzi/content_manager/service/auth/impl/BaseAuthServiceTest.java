@@ -1,5 +1,20 @@
 package com.iamvusumzi.content_manager.service.auth.impl;
 
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.Mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.iamvusumzi.content_manager.model.Role;
 import com.iamvusumzi.content_manager.model.User;
 import com.iamvusumzi.content_manager.repository.UserRepository;
@@ -7,16 +22,6 @@ import com.iamvusumzi.content_manager.security.JwtUtil;
 import com.iamvusumzi.content_manager.service.auth.dto.AuthResponse;
 import com.iamvusumzi.content_manager.service.auth.dto.LoginRequest;
 import com.iamvusumzi.content_manager.service.auth.dto.RegisterRequest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class BaseAuthServiceTest {
 
@@ -60,7 +65,7 @@ class BaseAuthServiceTest {
 
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(existingUser));
         when(passwordEncoder.matches("rawPass", "encodedPass")).thenReturn(true);
-        when(jwtUtil.generateToken("testUser", "rawPass")).thenReturn("fake-jwt-token");
+        when(jwtUtil.generateToken("testUser", "USER")).thenReturn("fake-jwt-token");
 
         AuthResponse response = baseAuthService.login(request);
 
@@ -70,7 +75,7 @@ class BaseAuthServiceTest {
         assertEquals("USER", response.getRole());
         verify(userRepository).findByUsername("testUser");
         verify(passwordEncoder).matches("rawPass", "encodedPass");
-        verify(jwtUtil).generateToken("testUser", "rawPass");
+        verify(jwtUtil).generateToken("testUser", "USER");
     }
 
     @Test
