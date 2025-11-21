@@ -1,4 +1,4 @@
-package com.iamvusumzi.content_manager.service.impl;
+package com.iamvusumzi.content_manager.service.content.impl;
 
 import com.iamvusumzi.content_manager.dto.ContentRequest;
 import com.iamvusumzi.content_manager.model.Content;

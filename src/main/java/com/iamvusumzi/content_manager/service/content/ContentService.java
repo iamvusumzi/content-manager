@@ -1,4 +1,4 @@
-package com.iamvusumzi.content_manager.service;
+package com.iamvusumzi.content_manager.service.content;
 import com.iamvusumzi.content_manager.model.Content;
 import com.iamvusumzi.content_manager.dto.ContentRequest;
 import java.util.List;
