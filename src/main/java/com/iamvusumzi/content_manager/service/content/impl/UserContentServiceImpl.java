@@ -1,11 +1,11 @@
-package com.iamvusumzi.content_manager.service.impl;
+package com.iamvusumzi.content_manager.service.content.impl;
 import com.iamvusumzi.content_manager.dto.ContentRequest;
 import com.iamvusumzi.content_manager.model.Content;
 import com.iamvusumzi.content_manager.model.Status;
 import com.iamvusumzi.content_manager.model.User;
 import com.iamvusumzi.content_manager.repository.ContentRepository;
 import com.iamvusumzi.content_manager.repository.UserRepository;
-import com.iamvusumzi.content_manager.service.ContentService;
+import com.iamvusumzi.content_manager.service.content.ContentService;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 

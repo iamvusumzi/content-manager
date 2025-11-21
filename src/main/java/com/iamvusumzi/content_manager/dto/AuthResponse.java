@@ -1,4 +1,4 @@
-package com.iamvusumzi.content_manager.service.auth.dto;
+package com.iamvusumzi.content_manager.dto;
 
 public class AuthResponse {
     private String username;
