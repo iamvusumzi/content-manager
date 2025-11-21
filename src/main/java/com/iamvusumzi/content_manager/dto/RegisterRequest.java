@@ -1,4 +1,4 @@
-package com.iamvusumzi.content_manager.service.auth.dto;
+package com.iamvusumzi.content_manager.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -4,8 +4,8 @@ import com.iamvusumzi.content_manager.model.User;
 import com.iamvusumzi.content_manager.repository.UserRepository;
 import com.iamvusumzi.content_manager.security.JwtUtil;
 import com.iamvusumzi.content_manager.service.auth.AuthService;
-import com.iamvusumzi.content_manager.service.auth.dto.AuthResponse;
-import com.iamvusumzi.content_manager.service.auth.dto.LoginRequest;
+import com.iamvusumzi.content_manager.dto.AuthResponse;
+import com.iamvusumzi.content_manager.dto.LoginRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public abstract class BaseAuthService implements AuthService {

@@ -1,7 +1,9 @@
 package com.iamvusumzi.content_manager.controller;
 
+import com.iamvusumzi.content_manager.dto.AuthResponse;
+import com.iamvusumzi.content_manager.dto.LoginRequest;
+import com.iamvusumzi.content_manager.dto.RegisterRequest;
 import com.iamvusumzi.content_manager.service.auth.AuthService;
-import com.iamvusumzi.content_manager.service.auth.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;

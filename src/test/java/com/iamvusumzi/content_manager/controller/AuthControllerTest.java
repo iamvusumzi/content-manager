@@ -1,9 +1,9 @@
 package com.iamvusumzi.content_manager.controller;
 
 import com.iamvusumzi.content_manager.service.auth.AuthService;
-import com.iamvusumzi.content_manager.service.auth.dto.AuthResponse;
-import com.iamvusumzi.content_manager.service.auth.dto.LoginRequest;
-import com.iamvusumzi.content_manager.service.auth.dto.RegisterRequest;
+import com.iamvusumzi.content_manager.dto.AuthResponse;
+import com.iamvusumzi.content_manager.dto.LoginRequest;
+import com.iamvusumzi.content_manager.dto.RegisterRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
