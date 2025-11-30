@@ -28,7 +28,8 @@ Built to demonstrate production-grade design patterns including validation, erro
 - Spring Boot 3.x
 - Spring Security (JWT)
 - JPA (Hibernate)
-- H2 Database (in-memory)
+- PostgreSQL docker image for dev
+- H2 Database - for tests (in-memory)
 - JUnit 5, Mockito, MockMvc
 
 ---
@@ -40,6 +41,7 @@ Built to demonstrate production-grade design patterns including validation, erro
 ```bash
 git clone https://github.com/iamvusumzi/content-manager.git
 cd content-manager
+docker-compose up
 mvn spring-boot:run
 ```
 
