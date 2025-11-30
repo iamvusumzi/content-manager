@@ -11,6 +11,7 @@ public class Content {
 
     private String title;
 
+    @Column(name = "description")
     private String desc;
 
     @Enumerated(EnumType.STRING)

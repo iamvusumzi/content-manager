@@ -27,9 +27,6 @@ Thumbs.db
 surefire-reports/
 test-output/
 
-# Environment / security files
-application-*.yml
-application-*.properties
 .env
 http-client.env.json
 
